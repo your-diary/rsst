@@ -1,3 +1,5 @@
 /target
 .*
 dev_note.md
+*.sqlite3
+sql/

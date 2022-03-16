@@ -13,7 +13,7 @@ pub struct Rss {
     item_list: Vec<RssItem>,
 }
 
-#[derive(Debug, Hash)]
+#[derive(Debug, Hash, Clone)]
 pub struct RssItem {
     title: Option<String>,
     link: Option<String>,
@@ -94,7 +94,7 @@ impl Rss {
                         }
                         _ => (),
                     },
-                    b"pub_date" => match tag_stack.last().unwrap() {
+                    b"pubDate" => match tag_stack.last().unwrap() {
                         TagType::Item => {
                             tag_stack.push(TagType::ItemPubDate);
                         }
@@ -148,6 +148,26 @@ impl Rss {
         ret
     }
 
+    pub fn hash_code(&self) -> String {
+        let mut hasher = DefaultHasher::new();
+        self.title.hash(&mut hasher);
+        self.link.hash(&mut hasher);
+        self.description.hash(&mut hasher);
+        hasher.finish().to_string()
+    }
+
+    pub fn get_title(&self) -> &str {
+        &self.title
+    }
+
+    pub fn get_link(&self) -> &str {
+        &self.link
+    }
+
+    pub fn get_description(&self) -> &str {
+        &self.description
+    }
+
     pub fn get_item_list(&self) -> &Vec<RssItem> {
         &self.item_list
     }
@@ -162,9 +182,26 @@ impl RssItem {
             pub_date: None,
         }
     }
-    pub fn hash_code(&self) -> u64 {
+
+    pub fn hash_code(&self) -> String {
         let mut hasher = DefaultHasher::new();
         self.hash(&mut hasher);
-        hasher.finish()
+        hasher.finish().to_string()
+    }
+
+    pub fn get_title(&self) -> &Option<String> {
+        &self.title
+    }
+
+    pub fn get_link(&self) -> &Option<String> {
+        &self.link
+    }
+
+    pub fn get_description(&self) -> &Option<String> {
+        &self.description
+    }
+
+    pub fn get_pub_date(&self) -> &Option<String> {
+        &self.pub_date
     }
 }
