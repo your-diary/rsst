@@ -15,7 +15,7 @@ fn handle_rss_feed_case(db: &Database, contents: &str) {
 
     let parent_hash = rss.hash_code();
 
-    if (!db.does_rss_feed_exist(&rss)) {
+    if (!db.does_feed_exist(&rss.hash_code())) {
         debug!(
             "New site: {} / {} / {}",
             rss.hash_code(),
@@ -34,7 +34,7 @@ fn handle_rss_feed_case(db: &Database, contents: &str) {
             rss.get_link()
         );
         let existent_rss_items: Vec<String> =
-            db.select_rss_feed_items(&rss.get_item_list().iter().map(|e| e.hash_code()).collect());
+            db.select_feed_items(&rss.get_item_list().iter().map(|e| e.hash_code()).collect());
         let mut new_rss_items: Vec<RssItem> = rss.get_item_list().clone();
         new_rss_items.retain(|e| !existent_rss_items.contains(&e.hash_code()));
         debug!("New rss items: {:?}", new_rss_items);
@@ -49,7 +49,7 @@ fn handle_atom_feed_case(db: &Database, contents: &str) {
 
     let parent_hash = atom.hash_code();
 
-    if (!db.does_atom_feed_exist(&atom)) {
+    if (!db.does_feed_exist(&atom.hash_code())) {
         debug!(
             "New site: {} / {} / {}",
             atom.hash_code(),
@@ -67,7 +67,7 @@ fn handle_atom_feed_case(db: &Database, contents: &str) {
             atom.get_title(),
             atom.get_id()
         );
-        let existent_atom_entries: Vec<String> = db.select_atom_feed_entries(
+        let existent_atom_entries: Vec<String> = db.select_feed_items(
             &atom
                 .get_entry_list()
                 .iter()
@@ -94,10 +94,10 @@ fn main() {
 
     let db = Database::new("test.sqlite3");
 
-    let contents: String = fs::read_to_string("../samples/arch_linux.xml").unwrap();
-    // let contents: String = fs::read_to_string("../samples/sample-rss-2.xml").unwrap();
-    //         let contents: String = fs::read_to_string("../samples/alpine_linux.xml").unwrap();
-    //     let contents: String = String::from("hello");
+    //     let contents: String = fs::read_to_string("../samples/arch_linux.xml").unwrap();
+    //     let contents: String = fs::read_to_string("../samples/sample-rss-2.xml").unwrap();
+    //             let contents: String = fs::read_to_string("../samples/alpine_linux.xml").unwrap();
+    //         let contents: String = String::from("hello");
 
     match FeedType::new(&contents) {
         FeedType::Rss => {
