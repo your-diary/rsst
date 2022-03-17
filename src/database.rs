@@ -17,13 +17,13 @@ impl Database {
         let db_connection = Connection::open(database_file).unwrap();
         rusqlite::vtab::array::load_module(&db_connection).unwrap();
 
-        //         // TODO: for debug
-        //         db_connection
-        //             .execute(r#"DROP TABLE IF EXISTS "feed_items";"#, [])
-        //             .unwrap();
-        //         db_connection
-        //             .execute(r#"DROP TABLE IF EXISTS "feeds";"#, [])
-        //             .unwrap();
+        //                 // TODO: for debug
+        //                 db_connection
+        //                     .execute(r#"DROP TABLE IF EXISTS "feed_items";"#, [])
+        //                     .unwrap();
+        //                 db_connection
+        //                     .execute(r#"DROP TABLE IF EXISTS "feeds";"#, [])
+        //                     .unwrap();
 
         Database::initialize_database(&db_connection);
 

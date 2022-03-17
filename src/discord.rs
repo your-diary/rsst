@@ -26,7 +26,7 @@ impl Trigger for DiscordNotification {
         debug!("DiscordNotification start: {:?}", trigger_info);
 
         let content = format!(
-            "Title: {}\nLink: {}\nDate: {}",
+            "--------------------\nTitle: {}\nLink: {}\nDate: {}",
             trigger_info.get_title().as_ref().unwrap_or(&String::new()),
             trigger_info.get_link().as_ref().unwrap_or(&String::new()),
             trigger_info
