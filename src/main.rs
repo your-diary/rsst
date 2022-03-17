@@ -6,11 +6,14 @@ use rsst;
 use rsst::atom::Atom;
 use rsst::atom::AtomEntry;
 use rsst::database::Database;
+use rsst::discord::DiscordNotification;
 use rsst::feedtype::FeedType;
 use rsst::rss::Rss;
 use rsst::rss::RssItem;
+use rsst::trigger::Trigger;
+use rsst::trigger::TriggerInfo;
 
-fn handle_rss_feed_case(db: &Database, contents: &str) {
+fn handle_rss_feed_case(db: &Database, contents: &str, trigger_list: Vec<Box<dyn Trigger>>) -> () {
     let rss = Rss::new(&contents);
 
     let parent_hash = rss.hash_code();
@@ -22,10 +25,23 @@ fn handle_rss_feed_case(db: &Database, contents: &str) {
             rss.get_title(),
             rss.get_link()
         );
-        db.insert_rss_feed(&rss);
-        db.insert_rss_feed_items(&parent_hash, rss.get_item_list());
-        debug!("Notify: {:?}", rss.get_item_list().first());
-        //TODO: notify last element
+
+        let latest_feed_item = rss.get_item_list().first().unwrap();
+
+        let is_trigger_success = trigger_list.iter().all(|e| {
+            e.pull_trigger(&TriggerInfo::new(
+                latest_feed_item.get_title(),
+                latest_feed_item.get_link(),
+                latest_feed_item.get_description(),
+                latest_feed_item.get_pub_date(),
+            ))
+            .is_ok()
+        });
+
+        if (is_trigger_success) {
+            db.insert_rss_feed(&rss);
+            db.insert_rss_feed_items(&parent_hash, rss.get_item_list());
+        }
     } else {
         debug!(
             "Existent site: {} / {} / {}",
@@ -33,18 +49,33 @@ fn handle_rss_feed_case(db: &Database, contents: &str) {
             rss.get_title(),
             rss.get_link()
         );
+
         let existent_rss_items: Vec<String> =
             db.select_feed_items(&rss.get_item_list().iter().map(|e| e.hash_code()).collect());
         let mut new_rss_items: Vec<RssItem> = rss.get_item_list().clone();
         new_rss_items.retain(|e| !existent_rss_items.contains(&e.hash_code()));
+
         debug!("New rss items: {:?}", new_rss_items);
-        db.insert_rss_feed_items(&parent_hash, &new_rss_items);
-        debug!("Notify: {:?}", new_rss_items);
-        //TODO: notify them
+
+        for new_rss_item in new_rss_items {
+            let is_trigger_success = trigger_list.iter().all(|e| {
+                e.pull_trigger(&TriggerInfo::new(
+                    new_rss_item.get_title(),
+                    new_rss_item.get_link(),
+                    new_rss_item.get_description(),
+                    new_rss_item.get_pub_date(),
+                ))
+                .is_ok()
+            });
+
+            if (is_trigger_success) {
+                db.insert_rss_feed_items(&parent_hash, &vec![new_rss_item]);
+            }
+        }
     }
 }
 
-fn handle_atom_feed_case(db: &Database, contents: &str) {
+fn handle_atom_feed_case(db: &Database, contents: &str) -> () {
     let atom = Atom::new(&contents);
 
     let parent_hash = atom.hash_code();
@@ -94,14 +125,16 @@ fn main() {
 
     let db = Database::new("test.sqlite3");
 
-    //     let contents: String = fs::read_to_string("../samples/arch_linux.xml").unwrap();
+    let contents: String = fs::read_to_string("../samples/arch_linux.xml").unwrap();
     //     let contents: String = fs::read_to_string("../samples/sample-rss-2.xml").unwrap();
     //             let contents: String = fs::read_to_string("../samples/alpine_linux.xml").unwrap();
     //         let contents: String = String::from("hello");
 
+    let discord = DiscordNotification::new("https://discord.com/api/webhooks/915979592320294922/idTy3fQi4khopKjbSe0V4ZtxwDhcSWWvykWkK27Isi0lEJPHnAb0TR7Mx-G5HQQAg_ji");
+
     match FeedType::new(&contents) {
         FeedType::Rss => {
-            handle_rss_feed_case(&db, &contents);
+            handle_rss_feed_case(&db, &contents, vec![Box::new(discord)]);
         }
         FeedType::Atom => {
             handle_atom_feed_case(&db, &contents);

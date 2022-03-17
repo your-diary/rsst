@@ -7,6 +7,38 @@
     <atom:link href="https://archlinux.org/feeds/news/" rel="self" />
     <language>en-us</language>
     <lastBuildDate>Wed, 23 Feb 2022 11:51:18 +0000</lastBuildDate>
+
+    <!--
+
+    <item>
+      <title>title1</title>
+      <link>link1</link>
+      <description>&lt;p&gt;This month we held our leader election, and our current leader Levente Poly&#195;&#161;k ran unopposed. As per &lt;a href="https://wiki.archlinux.org/title/DeveloperWiki:Project_Leader#Election"&gt;our election rules&lt;/a&gt; he is re-elected for a new term.&lt;/p&gt; &lt;p&gt;&lt;strong&gt;Congratulations to Levente Polyak on a new term!&lt;/strong&gt;&lt;/p&gt;</description>
+      <dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">Giancarlo Razzolini</dc:creator>
+      <pubDate>pubDate1</pubDate>
+      <guid isPermaLink="false">tag:archlinux.org,2022-02-23:/news/arch-linux-leader-election-results/</guid>
+    </item>
+
+    <item>
+      <title>title2</title>
+      <link>link2</link>
+      <description>&lt;p&gt;This month we held our leader election, and our current leader Levente Poly&#195;&#161;k ran unopposed. As per &lt;a href="https://wiki.archlinux.org/title/DeveloperWiki:Project_Leader#Election"&gt;our election rules&lt;/a&gt; he is re-elected for a new term.&lt;/p&gt; &lt;p&gt;&lt;strong&gt;Congratulations to Levente Polyak on a new term!&lt;/strong&gt;&lt;/p&gt;</description>
+      <dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">Giancarlo Razzolini</dc:creator>
+      <pubDate>pubDate2</pubDate>
+      <guid isPermaLink="false">tag:archlinux.org,2022-02-23:/news/arch-linux-leader-election-results/</guid>
+    </item>
+
+    <item>
+      <title>title3</title>
+      <link>link3</link>
+      <description>&lt;p&gt;This month we held our leader election, and our current leader Levente Poly&#195;&#161;k ran unopposed. As per &lt;a href="https://wiki.archlinux.org/title/DeveloperWiki:Project_Leader#Election"&gt;our election rules&lt;/a&gt; he is re-elected for a new term.&lt;/p&gt; &lt;p&gt;&lt;strong&gt;Congratulations to Levente Polyak on a new term!&lt;/strong&gt;&lt;/p&gt;</description>
+      <dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">Giancarlo Razzolini</dc:creator>
+      <pubDate>pubDate3</pubDate>
+      <guid isPermaLink="false">tag:archlinux.org,2022-02-23:/news/arch-linux-leader-election-results/</guid>
+    </item>
+
+    -->
+
     <item>
       <title>Arch Linux Leader Election Results</title>
       <link>https://archlinux.org/news/arch-linux-leader-election-results/</link>
