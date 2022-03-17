@@ -12,7 +12,7 @@ pub struct Atom {
     entry_list: Vec<AtomEntry>,
 }
 
-#[derive(Debug, Hash)]
+#[derive(Debug, Hash, Clone)]
 pub struct AtomEntry {
     title: String,
     id: String,
@@ -150,6 +150,21 @@ impl Atom {
         ret
     }
 
+    pub fn hash_code(&self) -> String {
+        let mut hasher = DefaultHasher::new();
+        self.title.hash(&mut hasher);
+        self.id.hash(&mut hasher);
+        hasher.finish().to_string()
+    }
+
+    pub fn get_title(&self) -> &str {
+        &self.title
+    }
+
+    pub fn get_id(&self) -> &str {
+        &self.id
+    }
+
     pub fn get_entry_list(&self) -> &Vec<AtomEntry> {
         &self.entry_list
     }
@@ -165,9 +180,29 @@ impl AtomEntry {
             content: None,
         }
     }
-    pub fn hash_code(&self) -> u64 {
+
+    pub fn hash_code(&self) -> String {
         let mut hasher = DefaultHasher::new();
         self.hash(&mut hasher);
-        hasher.finish()
+        hasher.finish().to_string()
+    }
+
+    pub fn get_title(&self) -> &str {
+        &self.title
+    }
+
+    pub fn get_id(&self) -> &str {
+        &self.id
+    }
+
+    pub fn get_updated(&self) -> &str {
+        &self.updated
+    }
+
+    pub fn get_summary_or_content(&self) -> &Option<String> {
+        match self.summary {
+            Some(_) => &self.summary,
+            None => &self.content,
+        }
     }
 }

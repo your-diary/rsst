@@ -2,6 +2,8 @@ use std::rc::Rc;
 
 use rusqlite::{params, types::Value, Connection};
 
+use super::atom::Atom;
+use super::atom::AtomEntry;
 use super::rss::Rss;
 use super::rss::RssItem;
 
@@ -40,6 +42,7 @@ pub struct Database {
     db_connection: Connection,
 }
 
+//misc
 impl Database {
     pub fn new(database_file: &str) -> Self {
         let db_connection = Connection::open(database_file).unwrap();
@@ -87,7 +90,10 @@ impl Database {
 
         Database { db_connection }
     }
+}
 
+//rss
+impl Database {
     pub fn does_rss_feed_exist(&self, rss: &Rss) -> bool {
         let mut stmt = self
             .db_connection
@@ -130,6 +136,56 @@ impl Database {
                 .execute(
                     r#"INSERT INTO "feed_items" ("hash", "parent_hash", "title", "link", "description", "pub_date") VALUES (?, ?, ?, ?, ?, ?)"#,
                     params![rss_item.hash_code(), parent_hash, rss_item.get_title(), rss_item.get_link(), rss_item.get_description(), rss_item.get_pub_date()]
+                )
+                .unwrap();
+        }
+    }
+}
+
+//atom
+impl Database {
+    pub fn does_atom_feed_exist(&self, atom: &Atom) -> bool {
+        let mut stmt = self
+            .db_connection
+            .prepare(r#"SELECT * FROM "feeds" WHERE "hash" = ?"#)
+            .unwrap();
+        stmt.exists([atom.hash_code()]).unwrap()
+    }
+
+    pub fn insert_atom_feed(&self, atom: &Atom) -> () {
+        self.db_connection
+            .execute(
+                r#"INSERT INTO "feeds" ("hash", "title", "link") VALUES (?, ?, ?)"#,
+                params![atom.hash_code(), atom.get_title(), atom.get_id()],
+            )
+            .unwrap();
+    }
+
+    pub fn select_atom_feed_entries(&self, hash_list: &Vec<String>) -> Vec<String> {
+        self.db_connection
+            .prepare(r#"SELECT "hash" FROM "feed_items" WHERE "hash" IN rarray(?)"#)
+            .unwrap()
+            .query_map(
+                params![Rc::new(
+                    hash_list
+                        .iter()
+                        .cloned()
+                        .map(Value::from)
+                        .collect::<Vec<Value>>()
+                )],
+                |r| r.get::<_, String>(0),
+            )
+            .unwrap()
+            .map(|e| e.unwrap())
+            .collect()
+    }
+
+    pub fn insert_atom_feed_entries(&self, parent_hash: &str, atom_entries: &Vec<AtomEntry>) -> () {
+        for atom_entry in atom_entries {
+            self.db_connection
+                .execute(
+                    r#"INSERT INTO "feed_items" ("hash", "parent_hash", "title", "link", "description", "pub_date") VALUES (?, ?, ?, ?, ?, ?)"#,
+                    params![atom_entry.hash_code(), parent_hash, atom_entry.get_title(), atom_entry.get_id(), atom_entry.get_summary_or_content(), atom_entry.get_updated()]
                 )
                 .unwrap();
         }
