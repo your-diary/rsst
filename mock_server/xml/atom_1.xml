@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+    <title>Sample Atom Feed</title>
+    <id>https://atom.example.com/</id>
+
+    <entry>
+        <title>title4</title>
+        <id>id4</id>
+        <updated>updated4</updated>
+        <!-- <summary>summary4</summary> -->
+        <!-- <content>content4</content> -->
+    </entry>
+
+    <entry>
+        <title>title3</title>
+        <id>id3</id>
+        <updated>updated3</updated>
+        <summary>summary3</summary>
+        <!-- <content>content3</content> -->
+    </entry>
+
+    <entry>
+        <title>title2</title>
+        <id>id2</id>
+        <updated>updated2</updated>
+        <!-- <summary>summary2</summary> -->
+        <content>content2</content>
+    </entry>
+
+    <entry>
+        <title>title1</title>
+        <id>id1</id>
+        <updated>updated1</updated>
+        <summary>summary1</summary>
+        <content>content1</content>
+    </entry>
+
+</feed>

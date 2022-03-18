@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+    <channel>
+
+        <title>Sample RSS Feed</title>
+        <link>https://example.com/</link>
+        <description>This is a sample rss feed.</description>
+
+        <item>
+            <title>title4</title>
+            <link>link4</link>
+            <description>description4</description>
+            <pubDate>pubDate4</pubDate>
+        </item>
+
+        <item>
+            <title>title3</title>
+            <link>link3</link>
+            <description>description3</description>
+            <pubDate>pubDate3</pubDate>
+        </item>
+
+        <item>
+            <title>title2</title>
+            <link>link2</link>
+            <description>description2</description>
+            <pubDate>pubDate2</pubDate>
+        </item>
+
+        <item>
+            <title>title1</title>
+            <link>link1</link>
+            <description>description1</description>
+            <pubDate>pubDate1</pubDate>
+        </item>
+
+    </channel>
+</rss>
