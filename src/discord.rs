@@ -1,4 +1,5 @@
 use std::error::Error;
+use std::time::Duration;
 
 use json::{self, JsonValue};
 use log::*;
@@ -45,6 +46,7 @@ impl Trigger for DiscordNotification {
             .post(&self.webhook_url)
             .body(json.dump())
             .header("Content-Type", "application/json")
+            .timeout(Duration::from_millis(10000))
             .send()?;
 
         if res.status().is_success() {
