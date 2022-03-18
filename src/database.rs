@@ -13,17 +13,19 @@ pub struct Database {
 
 //misc
 impl Database {
-    pub fn new(database_file: &str) -> Self {
+    pub fn new(database_file: &str, should_drop_tables_first: bool) -> Self {
         let db_connection = Connection::open(database_file).unwrap();
         rusqlite::vtab::array::load_module(&db_connection).unwrap();
 
-        //                 // TODO: for debug
-        //                 db_connection
-        //                     .execute(r#"DROP TABLE IF EXISTS "feed_items";"#, [])
-        //                     .unwrap();
-        //                 db_connection
-        //                     .execute(r#"DROP TABLE IF EXISTS "feeds";"#, [])
-        //                     .unwrap();
+        //for debug
+        if (should_drop_tables_first) {
+            db_connection
+                .execute(r#"DROP TABLE IF EXISTS "feed_items";"#, [])
+                .unwrap();
+            db_connection
+                .execute(r#"DROP TABLE IF EXISTS "feeds";"#, [])
+                .unwrap();
+        }
 
         Database::initialize_database(&db_connection);
 

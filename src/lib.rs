@@ -6,8 +6,10 @@ pub mod rss;
 pub mod trigger;
 
 use std::env;
+use std::time::Duration;
 
 use log::*;
+use reqwest::blocking::Client;
 
 use atom::Atom;
 use atom::AtomEntry;
@@ -24,6 +26,16 @@ pub fn initialize_logger(should_log_debug: bool) -> () {
         env::set_var("RUST_LOG", "info");
     }
     env_logger::init();
+}
+
+pub fn retrieve_xml(url: &str) -> String {
+    Client::new()
+        .get(url)
+        .timeout(Duration::from_millis(10000))
+        .send()
+        .unwrap()
+        .text()
+        .unwrap()
 }
 
 pub fn handle_rss_feed_case(

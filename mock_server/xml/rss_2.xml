@@ -3,7 +3,7 @@
     <channel>
 
         <title>Sample RSS Feed</title>
-        <link>https://example.com/</link>
+        <link>https://rss.example.com/</link>
         <description>This is a sample rss feed.</description>
 
         <item>

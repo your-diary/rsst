@@ -1,4 +1,4 @@
-use std::fs;
+use log::*;
 
 use rsst;
 use rsst::database::Database;
@@ -13,26 +13,31 @@ fn main() {
     const DATABASE_FILE: &str = "test.sqlite3";
     const DISCORD_WEBHOOK_URL: &str = "https://discord.com/api/webhooks/915979592320294922/idTy3fQi4khopKjbSe0V4ZtxwDhcSWWvykWkK27Isi0lEJPHnAb0TR7Mx-G5HQQAg_ji";
 
-    let db = Database::new(DATABASE_FILE);
+    const SHOULD_DROP_TABLES_FIRST: bool = false;
 
-    //     let contents: String = fs::read_to_string("../samples/arch_linux.xml").unwrap();
-    //     let contents: String = fs::read_to_string("../samples/sample-rss-2.xml").unwrap();
-    let contents: String = fs::read_to_string("../samples/alpine_linux.xml").unwrap();
-    //         let contents: String = String::from("hello");
+    let db = Database::new(DATABASE_FILE, SHOULD_DROP_TABLES_FIRST);
 
     let discord = DiscordNotification::new(DISCORD_WEBHOOK_URL);
 
     let trigger_list: Vec<Box<dyn Trigger>> = vec![Box::new(discord)];
 
-    match FeedType::new(&contents) {
-        FeedType::Rss => {
-            rsst::handle_rss_feed_case(&db, &contents, &trigger_list);
-        }
-        FeedType::Atom => {
-            rsst::handle_atom_feed_case(&db, &contents, &trigger_list);
-        }
-        _ => {
-            panic!("Unknown feed type.");
+    let url_list = vec!["http://localhost:9009/"];
+
+    for url in url_list {
+        debug!("URL: {}", url);
+
+        let xml: String = rsst::retrieve_xml(url);
+
+        match FeedType::new(&xml) {
+            FeedType::Rss => {
+                rsst::handle_rss_feed_case(&db, &xml, &trigger_list);
+            }
+            FeedType::Atom => {
+                rsst::handle_atom_feed_case(&db, &xml, &trigger_list);
+            }
+            _ => {
+                panic!("Unknown feed type.");
+            }
         }
     }
 }

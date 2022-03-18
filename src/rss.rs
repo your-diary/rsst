@@ -145,6 +145,8 @@ impl Rss {
             }
         }
 
+        ret.item_list.reverse();
+
         ret
     }
 
