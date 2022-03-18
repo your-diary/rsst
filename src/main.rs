@@ -1,32 +1,26 @@
 use log::*;
 
 use rsst;
+use rsst::config::Config;
 use rsst::database::Database;
-use rsst::discord::DiscordNotification;
 use rsst::feedtype::FeedType;
 use rsst::trigger::Trigger;
 
+const SHOULD_DROP_TABLES_FIRST: bool = false; //for debug
+
 fn main() {
-    const SHOULD_LOG_DEBUG: bool = true;
-    rsst::initialize_logger(SHOULD_LOG_DEBUG);
+    let config = Config::new("config.json");
 
-    const DATABASE_FILE: &str = "test.sqlite3";
-    const DISCORD_WEBHOOK_URL: &str = "https://discord.com/api/webhooks/915979592320294922/idTy3fQi4khopKjbSe0V4ZtxwDhcSWWvykWkK27Isi0lEJPHnAb0TR7Mx-G5HQQAg_ji";
+    rsst::initialize_logger(*config.get_should_log_debug());
 
-    const SHOULD_DROP_TABLES_FIRST: bool = false;
+    let db = Database::new(config.get_database_file(), SHOULD_DROP_TABLES_FIRST);
 
-    let db = Database::new(DATABASE_FILE, SHOULD_DROP_TABLES_FIRST);
+    let trigger_list: &Vec<Box<dyn Trigger>> = config.get_trigger_list();
 
-    let discord = DiscordNotification::new(DISCORD_WEBHOOK_URL);
+    for feed_url in config.get_feed_url_list() {
+        debug!("URL: {}", feed_url);
 
-    let trigger_list: Vec<Box<dyn Trigger>> = vec![Box::new(discord)];
-
-    let url_list = vec!["http://localhost:9009/"];
-
-    for url in url_list {
-        debug!("URL: {}", url);
-
-        let xml: String = rsst::retrieve_xml(url);
+        let xml: String = rsst::retrieve_xml(feed_url);
 
         match FeedType::new(&xml) {
             FeedType::Rss => {

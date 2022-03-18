@@ -1,4 +1,5 @@
 pub mod atom;
+pub mod config;
 pub mod database;
 pub mod discord;
 pub mod feedtype;
