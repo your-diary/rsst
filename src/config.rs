@@ -14,22 +14,6 @@ pub struct Config {
 }
 
 impl Config {
-    pub fn get_should_log_debug(&self) -> &bool {
-        &self.should_log_debug
-    }
-
-    pub fn get_database_file(&self) -> &str {
-        &self.database_file
-    }
-
-    pub fn get_trigger_list(&self) -> &Vec<Box<dyn Trigger>> {
-        &self.trigger_list
-    }
-
-    pub fn get_feed_url_list(&self) -> &Vec<String> {
-        &self.feed_url_list
-    }
-
     pub fn new(config_file: &str) -> Self {
         let mut ret = Config {
             should_log_debug: false,
@@ -85,14 +69,26 @@ impl Config {
             _ => panic!(),
         }
 
-        ret.validate();
+        assert!(!ret.database_file.is_empty());
+        assert!(!ret.trigger_list.is_empty());
+        assert!(!ret.feed_url_list.is_empty());
 
         ret
     }
 
-    fn validate(&self) -> () {
-        assert!(!self.database_file.is_empty());
-        assert!(!self.trigger_list.is_empty());
-        assert!(!self.feed_url_list.is_empty());
+    pub fn get_should_log_debug(&self) -> &bool {
+        &self.should_log_debug
+    }
+
+    pub fn get_database_file(&self) -> &str {
+        &self.database_file
+    }
+
+    pub fn get_trigger_list(&self) -> &Vec<Box<dyn Trigger>> {
+        &self.trigger_list
+    }
+
+    pub fn get_feed_url_list(&self) -> &Vec<String> {
+        &self.feed_url_list
     }
 }

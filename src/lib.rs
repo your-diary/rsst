@@ -58,6 +58,8 @@ pub fn handle_rss_feed_case(
 
         let latest_feed_item = rss.get_item_list().first().unwrap();
 
+        //To confirm that the triggers successfully work for the new site,
+        // we pull each trigger only for the latest feed item.
         let is_trigger_success = trigger_list.iter().all(|e| {
             e.pull_trigger(&TriggerInfo::new(
                 latest_feed_item.get_title(),
@@ -124,6 +126,8 @@ pub fn handle_atom_feed_case(
 
         let latest_atom_entry = atom.get_entry_list().first().unwrap();
 
+        //To confirm that the triggers successfully work for the new site,
+        // we pull each trigger only for the latest feed item.
         let is_trigger_success = trigger_list.iter().all(|e| {
             e.pull_trigger(&TriggerInfo::new(
                 &Some(latest_atom_entry.get_title().to_string()),
