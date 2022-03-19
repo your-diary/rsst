@@ -2,7 +2,7 @@ FROM alpine:latest
 
 WORKDIR /rsst
 
-COPY Cargo.toml Cargo.lock cron.sh .
+COPY Cargo.toml Cargo.lock cron.sh ./
 COPY src/ src/
 
 RUN apk add vim bash curl go rust cargo pkgconfig libressl-dev jq
