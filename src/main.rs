@@ -9,7 +9,7 @@ use rsst::trigger::Trigger;
 const SHOULD_DROP_TABLES_FIRST: bool = false; //for debug
 
 fn main() {
-    let config = Config::new("config.json");
+    let config = Config::new("./conf/config.json");
 
     rsst::initialize_logger(*config.get_should_log_debug());
 

@@ -1,0 +1,10 @@
+services:
+    rsst:
+        build: .
+        image: rsst
+        container_name: rsst
+        volumes:
+            - ./conf/:/rsst/conf
+        environment:
+            RSST_INTERVAL_MIN: "60"
+        restart: always

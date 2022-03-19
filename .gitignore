@@ -1,7 +1,9 @@
 /target
 .*
+!.gitignore
 dev_note.md
 *.sqlite3
 sql/
 config.json
 *.out
+log.txt

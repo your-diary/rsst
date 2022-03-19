@@ -147,8 +147,6 @@ impl Atom {
             }
         }
 
-        ret.entry_list.reverse();
-
         ret
     }
 
