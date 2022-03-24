@@ -13,7 +13,7 @@ pub struct Rss {
     item_list: Vec<RssItem>,
 }
 
-#[derive(Debug, Hash, Clone)]
+#[derive(Debug, Clone)]
 pub struct RssItem {
     title: Option<String>,
     link: Option<String>,
@@ -183,9 +183,12 @@ impl RssItem {
         }
     }
 
+    //We intentionally omit `self.description` as some feed suppliers often (e.g. everyday) update its value.
     pub fn hash_code(&self) -> String {
         let mut hasher = DefaultHasher::new();
-        self.hash(&mut hasher);
+        self.title.hash(&mut hasher);
+        self.link.hash(&mut hasher);
+        self.pub_date.hash(&mut hasher);
         hasher.finish().to_string()
     }
 

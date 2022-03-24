@@ -12,7 +12,7 @@ pub struct Atom {
     entry_list: Vec<AtomEntry>,
 }
 
-#[derive(Debug, Hash, Clone)]
+#[derive(Debug, Clone)]
 pub struct AtomEntry {
     title: String,
     id: String,
@@ -181,9 +181,12 @@ impl AtomEntry {
         }
     }
 
+    //We intentionally omit `self.summary` and `self.content` as some feed suppliers often (e.g. everyday) update their values.
     pub fn hash_code(&self) -> String {
         let mut hasher = DefaultHasher::new();
-        self.hash(&mut hasher);
+        self.title.hash(&mut hasher);
+        self.id.hash(&mut hasher);
+        self.updated.hash(&mut hasher);
         hasher.finish().to_string()
     }
 

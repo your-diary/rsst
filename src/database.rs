@@ -38,9 +38,10 @@ impl Database {
             .execute(
                 r#"
                     CREATE TABLE IF NOT EXISTS "feeds" (
-                        "hash"  TEXT PRIMARY KEY,
-                        "title" TEXT NOT NULL,
-                        "link"  TEXT NOT NULL
+                        "insertion_date" DATETIME DEFAULT CURRENT_TIMESTAMP,
+                        "hash"           TEXT PRIMARY KEY,
+                        "title"          TEXT NOT NULL,
+                        "link"           TEXT NOT NULL
                     )
                 "#,
                 [],
@@ -52,12 +53,13 @@ impl Database {
             .execute(
                 r#"
                 CREATE TABLE IF NOT EXISTS "feed_items" (
-                    "hash"        TEXT PRIMARY KEY,
-                    "parent_hash" TEXT,
-                    "title"       TEXT,
-                    "link"        TEXT,
-                    "description" TEXT,
-                    "pub_date"    TEXT,
+                    "insertion_date" DATETIME DEFAULT CURRENT_TIMESTAMP,
+                    "hash"           TEXT PRIMARY KEY,
+                    "parent_hash"    TEXT,
+                    "title"          TEXT,
+                    "link"           TEXT,
+                    "description"    TEXT,
+                    "pub_date"       TEXT,
                     FOREIGN KEY("parent_hash") REFERENCES feeds("hash")
                 )
                 "#,
