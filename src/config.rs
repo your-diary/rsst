@@ -5,6 +5,7 @@ use json::JsonValue;
 
 use super::discord::DiscordNotification;
 use super::trigger::Trigger;
+use super::twitter::TwitterNotification;
 
 pub struct Config {
     should_log_debug: bool,
@@ -55,6 +56,15 @@ impl Config {
                                                     o.get("webhook_url").unwrap().as_str().unwrap(),
                                                 ),
                                             ));
+                                        }
+                                    }
+                                    _ => panic!(),
+                                },
+                                ("twitter", o) => match o {
+                                    JsonValue::Object(o) => {
+                                        if (o.get("enabled").unwrap().as_bool().unwrap()) {
+                                            ret.trigger_list
+                                                .push(Box::new(TwitterNotification::new()));
                                         }
                                     }
                                     _ => panic!(),

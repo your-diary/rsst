@@ -1,10 +1,12 @@
 pub mod atom;
+pub mod command;
 pub mod config;
 pub mod database;
 pub mod discord;
 pub mod feedtype;
 pub mod rss;
 pub mod trigger;
+pub mod twitter;
 
 use std::env;
 use std::time::Duration;

@@ -22,15 +22,19 @@ Main Features:
 
 When rsst detects new blog entries, it runs a series of registered *triggers* for each entry.
 
-For example, `Discord` trigger is by default implemented, which sends a message to your Discord server.
+For example, `Discord` trigger is by default implemented, which sends a message to your Discord server:
 
 |![](readme_assets/discord.png)|
 |:--:|
 | An example of `Discord` trigger. |
 
-In a similar manner, any triggers can be implemented by yourself (or via feature requests perhaps). Here's a part of my future ideas:
+`Twitter` trigger is also implemented, which posts a tweet:
 
-- `Twitter` trigger to tweet an new blog entry using your private bot account.
+|![](readme_assets/twitter.png)|
+|:--:|
+| An example of `Twitter` trigger. |
+
+In a similar manner, any triggers can be implemented by yourself (or via feature requests perhaps). Here's the list of my future ideas:
 
 - `Pocket` trigger to add an new blog entry to your Pocket list.
 
@@ -54,7 +58,14 @@ Example:
     "triggers": {
         "discord": {
             "enabled": true,
-            "webhook_url": "https://discord.com/api/webhooks/217647058221348866/DPeZfHx66dN2OeHeTBmMWp347pIibEDmSCbz7k3HMh7aku9wKJqKaTjCyfJnMSKsnvsd"
+            "webhook_url": "..."
+        },
+        "twitter": {
+            "enabled": true,
+            "consumer_key": "...",
+            "consumer_secret": "...",
+            "access_token": "...",
+            "access_token_secret": "..."
         }
     },
     "feed_url_list": [
@@ -65,8 +76,6 @@ Example:
     ]
 }
 ```
-
-( :warning: The value of `webhook_url` in this example is invalid of course. Use yours.)
 
 # 4. Build
 
