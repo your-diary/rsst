@@ -27,6 +27,13 @@ while true; do
         curl --silent -X POST "${discord_webhook_url}" -H 'Content-Type: application/json' -d '{"wait": true, "content": "rsst: Failed. See the log."}'
     fi
     echo
-    sleep $((i * 60))
+    for ((j = 0; j < i; ++j)); do
+        restart='./conf/.restart'
+        if [[ -f "${restart}" ]]; then
+            rm "${restart}"
+            break
+        fi
+        sleep 60
+    done
 done
 
