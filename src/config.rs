@@ -4,6 +4,7 @@ use json;
 use json::JsonValue;
 
 use super::discord::DiscordNotification;
+use super::feedurl::FeedUrl;
 use super::trigger::Trigger;
 use super::twitter::TwitterNotification;
 
@@ -11,7 +12,7 @@ pub struct Config {
     should_log_debug: bool,
     database_file: String,
     trigger_list: Vec<Box<dyn Trigger>>,
-    feed_url_list: Vec<String>,
+    feed_url_list: Vec<FeedUrl>,
 }
 
 impl Config {
@@ -38,8 +39,15 @@ impl Config {
 
                 match o.get("feed_url_list").unwrap() {
                     JsonValue::Array(v) => {
-                        ret.feed_url_list =
-                            v.iter().map(|e| e.as_str().unwrap().to_string()).collect()
+                        ret.feed_url_list = v
+                            .iter()
+                            .map(|o| match o {
+                                JsonValue::Object(o) => {
+                                    FeedUrl::new(o.get("url").unwrap().as_str().unwrap())
+                                }
+                                _ => panic!(),
+                            })
+                            .collect()
                     }
                     _ => panic!(),
                 };
@@ -98,7 +106,7 @@ impl Config {
         &self.trigger_list
     }
 
-    pub fn get_feed_url_list(&self) -> &Vec<String> {
+    pub fn get_feed_url_list(&self) -> &Vec<FeedUrl> {
         &self.feed_url_list
     }
 }

@@ -4,6 +4,7 @@ pub mod config;
 pub mod database;
 pub mod discord;
 pub mod feedtype;
+pub mod feedurl;
 pub mod rss;
 pub mod trigger;
 pub mod twitter;
