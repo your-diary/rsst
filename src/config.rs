@@ -43,7 +43,28 @@ impl Config {
                             .iter()
                             .map(|o| match o {
                                 JsonValue::Object(o) => {
-                                    FeedUrl::new(o.get("url").unwrap().as_str().unwrap())
+                                    let mut feed_url =
+                                        FeedUrl::new(o.get("url").unwrap().as_str().unwrap());
+                                    if let Some(b) = o.get("should_omit_summary_from_atom_hash") {
+                                        feed_url.should_omit_summary_from_atom_hash =
+                                            b.as_bool().unwrap();
+                                    }
+                                    if let Some(b) = o.get("should_omit_content_from_atom_hash") {
+                                        feed_url.should_omit_content_from_atom_hash =
+                                            b.as_bool().unwrap();
+                                    }
+                                    if let Some(b) = o.get("should_omit_updated_from_atom_hash") {
+                                        feed_url.should_omit_updated_from_atom_hash =
+                                            b.as_bool().unwrap();
+                                    }
+                                    if let Some(b) = o.get("should_omit_pub_date_from_rss_hash") {
+                                        feed_url.should_omit_pub_date_from_rss_hash =
+                                            b.as_bool().unwrap();
+                                    }
+                                    if let Some(b) = o.get("is_golang_blog_mode") {
+                                        feed_url.is_golang_blog_mode = b.as_bool().unwrap();
+                                    }
+                                    feed_url
                                 }
                                 _ => panic!(),
                             })

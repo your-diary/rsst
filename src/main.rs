@@ -18,7 +18,7 @@ fn main() {
     let trigger_list: &Vec<Box<dyn Trigger>> = config.get_trigger_list();
 
     for feed_url in config.get_feed_url_list() {
-        debug!("URL: {}", feed_url.get_url());
+        debug!("URL: {:?}", feed_url);
         continue;
 
         let xml: String = rsst::retrieve_xml(feed_url.get_url());
