@@ -1,4 +1,4 @@
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct FeedConfig {
     url: String,
     pub should_omit_summary_from_atom_hash: bool,

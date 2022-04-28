@@ -5,12 +5,15 @@ use std::hash::Hasher;
 use quick_xml::events::Event;
 use quick_xml::Reader;
 
+use super::feedconfig::FeedConfig;
+
 #[derive(Debug)]
 pub struct Rss {
     title: String,
     link: String,
     description: String,
     item_list: Vec<RssItem>,
+    feed_config: FeedConfig,
 }
 
 #[derive(Debug, Clone)]
@@ -35,12 +38,13 @@ enum TagType {
 }
 
 impl Rss {
-    pub fn new(xml: &str) -> Self {
+    pub fn new(xml: &str, feed_config: &FeedConfig) -> Self {
         let mut ret = Rss {
             title: String::new(),
             link: String::new(),
             description: String::new(),
             item_list: Vec::new(),
+            feed_config: feed_config.clone(),
         };
 
         let mut reader = Reader::from_str(xml);

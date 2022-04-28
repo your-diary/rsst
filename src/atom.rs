@@ -5,11 +5,14 @@ use std::hash::Hasher;
 use quick_xml::events::Event;
 use quick_xml::Reader;
 
+use super::feedconfig::FeedConfig;
+
 #[derive(Debug)]
 pub struct Atom {
     title: String,
     id: String,
     entry_list: Vec<AtomEntry>,
+    feed_config: FeedConfig,
 }
 
 #[derive(Debug, Clone)]
@@ -35,11 +38,12 @@ enum TagType {
 }
 
 impl Atom {
-    pub fn new(xml: &str) -> Self {
+    pub fn new(xml: &str, feed_config: &FeedConfig) -> Self {
         let mut ret = Atom {
             title: String::new(),
             id: String::new(),
             entry_list: Vec::new(),
+            feed_config: feed_config.clone(),
         };
 
         let mut reader = Reader::from_str(xml);

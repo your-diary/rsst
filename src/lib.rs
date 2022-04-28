@@ -18,6 +18,7 @@ use reqwest::blocking::Client;
 use atom::Atom;
 use atom::AtomEntry;
 use database::Database;
+use feedconfig::FeedConfig;
 use rss::Rss;
 use rss::RssItem;
 use trigger::Trigger;
@@ -46,8 +47,9 @@ pub fn handle_rss_feed_case(
     db: &Database,
     contents: &str,
     trigger_list: &Vec<Box<dyn Trigger>>,
+    feed_config: &FeedConfig,
 ) -> () {
-    let rss = Rss::new(&contents);
+    let rss = Rss::new(&contents, &feed_config);
 
     let parent_hash = rss.hash_code();
 
@@ -114,8 +116,9 @@ pub fn handle_atom_feed_case(
     db: &Database,
     contents: &str,
     trigger_list: &Vec<Box<dyn Trigger>>,
+    feed_config: &FeedConfig,
 ) -> () {
-    let atom = Atom::new(&contents);
+    let atom = Atom::new(&contents, &feed_config);
 
     let parent_hash = atom.hash_code();
 

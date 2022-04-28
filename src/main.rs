@@ -25,10 +25,10 @@ fn main() {
 
         match FeedType::new(&xml) {
             FeedType::Rss => {
-                rsst::handle_rss_feed_case(&db, &xml, &trigger_list);
+                rsst::handle_rss_feed_case(&db, &xml, &trigger_list, &feed_config);
             }
             FeedType::Atom => {
-                rsst::handle_atom_feed_case(&db, &xml, &trigger_list);
+                rsst::handle_atom_feed_case(&db, &xml, &trigger_list, &feed_config);
             }
             _ => {
                 panic!("Unknown feed type.");
