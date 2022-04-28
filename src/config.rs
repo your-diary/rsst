@@ -4,7 +4,7 @@ use json;
 use json::JsonValue;
 
 use super::discord::DiscordNotification;
-use super::feedurl::FeedUrl;
+use super::feedconfig::FeedConfig;
 use super::trigger::Trigger;
 use super::twitter::TwitterNotification;
 
@@ -12,7 +12,7 @@ pub struct Config {
     should_log_debug: bool,
     database_file: String,
     trigger_list: Vec<Box<dyn Trigger>>,
-    feed_url_list: Vec<FeedUrl>,
+    feed_config_list: Vec<FeedConfig>,
 }
 
 impl Config {
@@ -21,7 +21,7 @@ impl Config {
             should_log_debug: false,
             database_file: String::new(),
             trigger_list: Vec::new(),
-            feed_url_list: Vec::new(),
+            feed_config_list: Vec::new(),
         };
 
         let json_string: String = fs::read_to_string(config_file).unwrap();
@@ -37,34 +37,34 @@ impl Config {
                     .unwrap()
                     .to_string();
 
-                match o.get("feed_url_list").unwrap() {
+                match o.get("feed_config_list").unwrap() {
                     JsonValue::Array(v) => {
-                        ret.feed_url_list = v
+                        ret.feed_config_list = v
                             .iter()
                             .map(|o| match o {
                                 JsonValue::Object(o) => {
-                                    let mut feed_url =
-                                        FeedUrl::new(o.get("url").unwrap().as_str().unwrap());
+                                    let mut feed_config =
+                                        FeedConfig::new(o.get("url").unwrap().as_str().unwrap());
                                     if let Some(b) = o.get("should_omit_summary_from_atom_hash") {
-                                        feed_url.should_omit_summary_from_atom_hash =
+                                        feed_config.should_omit_summary_from_atom_hash =
                                             b.as_bool().unwrap();
                                     }
                                     if let Some(b) = o.get("should_omit_content_from_atom_hash") {
-                                        feed_url.should_omit_content_from_atom_hash =
+                                        feed_config.should_omit_content_from_atom_hash =
                                             b.as_bool().unwrap();
                                     }
                                     if let Some(b) = o.get("should_omit_updated_from_atom_hash") {
-                                        feed_url.should_omit_updated_from_atom_hash =
+                                        feed_config.should_omit_updated_from_atom_hash =
                                             b.as_bool().unwrap();
                                     }
                                     if let Some(b) = o.get("should_omit_pub_date_from_rss_hash") {
-                                        feed_url.should_omit_pub_date_from_rss_hash =
+                                        feed_config.should_omit_pub_date_from_rss_hash =
                                             b.as_bool().unwrap();
                                     }
                                     if let Some(b) = o.get("is_golang_blog_mode") {
-                                        feed_url.is_golang_blog_mode = b.as_bool().unwrap();
+                                        feed_config.is_golang_blog_mode = b.as_bool().unwrap();
                                     }
-                                    feed_url
+                                    feed_config
                                 }
                                 _ => panic!(),
                             })
@@ -110,7 +110,7 @@ impl Config {
 
         assert!(!ret.database_file.is_empty());
         assert!(!ret.trigger_list.is_empty());
-        assert!(!ret.feed_url_list.is_empty());
+        assert!(!ret.feed_config_list.is_empty());
 
         ret
     }
@@ -127,7 +127,7 @@ impl Config {
         &self.trigger_list
     }
 
-    pub fn get_feed_url_list(&self) -> &Vec<FeedUrl> {
-        &self.feed_url_list
+    pub fn get_feed_config_list(&self) -> &Vec<FeedConfig> {
+        &self.feed_config_list
     }
 }

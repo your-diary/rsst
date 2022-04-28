@@ -1,5 +1,5 @@
 #[derive(Debug)]
-pub struct FeedUrl {
+pub struct FeedConfig {
     url: String,
     pub should_omit_summary_from_atom_hash: bool,
     pub should_omit_content_from_atom_hash: bool,
@@ -8,9 +8,9 @@ pub struct FeedUrl {
     pub is_golang_blog_mode: bool,
 }
 
-impl FeedUrl {
+impl FeedConfig {
     pub fn new(url: &str) -> Self {
-        FeedUrl {
+        FeedConfig {
             url: url.to_string(),
             should_omit_summary_from_atom_hash: true,
             should_omit_content_from_atom_hash: true,
