@@ -51,10 +51,13 @@ cp conf/config_template.json conf/config.json
 vi conf/config.json
 ```
 
+Comments of the form `^\s*#.*$` are allowed.
+
 ## 3.2 Example
 
 ```json
 {
+    #This is a comment.
     "should_log_debug": true,
     "database_file": "./conf/db.sqlite3",
     "triggers": {

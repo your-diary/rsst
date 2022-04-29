@@ -1,7 +1,10 @@
-use std::fs;
+use std::fs::File;
+use std::io::BufRead;
+use std::io::BufReader;
 
 use json;
 use json::JsonValue;
+use regex::Regex;
 
 use super::discord::DiscordNotification;
 use super::feedconfig::FeedConfig;
@@ -24,7 +27,18 @@ impl Config {
             feed_config_list: Vec::new(),
         };
 
-        let json_string: String = fs::read_to_string(config_file).unwrap();
+        let json_string: String = {
+            let file: File = File::open(config_file).unwrap();
+
+            let comment_regex = Regex::new(r#"^\s*#.*"#).unwrap();
+
+            BufReader::new(file)
+                .lines()
+                .filter(|l| !comment_regex.is_match(l.as_ref().unwrap()))
+                .map(|l| l.unwrap())
+                .collect::<Vec<String>>()
+                .join("\n")
+        };
 
         match json::parse(&json_string).unwrap() {
             JsonValue::Object(o) => {
