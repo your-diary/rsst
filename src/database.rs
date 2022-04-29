@@ -76,7 +76,7 @@ impl Database {
         stmt.exists([hash_code]).unwrap()
     }
 
-    fn insert_into_feeds(&self, hash_code: &str, title: &str, link: &str) -> () {
+    fn insert_into_feeds(&self, hash_code: &str, title: &str, link: &str) {
         self.db_connection
             .execute(
                 r#"INSERT INTO "feeds" ("hash", "title", "link") VALUES (?, ?, ?)"#,
@@ -107,11 +107,11 @@ impl Database {
 
 //rss
 impl Database {
-    pub fn insert_rss_feed(&self, rss: &Rss) -> () {
+    pub fn insert_rss_feed(&self, rss: &Rss) {
         self.insert_into_feeds(&rss.hash_code(), rss.get_title(), rss.get_link());
     }
 
-    pub fn insert_rss_feed_items(&self, parent_hash: &str, rss_items: &Vec<RssItem>) -> () {
+    pub fn insert_rss_feed_items(&self, parent_hash: &str, rss_items: &Vec<RssItem>) {
         for rss_item in rss_items {
             self.db_connection
                 .execute(
@@ -136,11 +136,11 @@ impl Database {
 
 //atom
 impl Database {
-    pub fn insert_atom_feed(&self, atom: &Atom) -> () {
+    pub fn insert_atom_feed(&self, atom: &Atom) {
         self.insert_into_feeds(&atom.hash_code(), atom.get_title(), atom.get_id());
     }
 
-    pub fn insert_atom_feed_entries(&self, parent_hash: &str, atom_entries: &Vec<AtomEntry>) -> () {
+    pub fn insert_atom_feed_entries(&self, parent_hash: &str, atom_entries: &Vec<AtomEntry>) {
         for atom_entry in atom_entries {
             self.db_connection
                 .execute(

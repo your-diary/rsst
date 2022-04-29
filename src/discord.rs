@@ -54,7 +54,7 @@ impl Trigger for DiscordNotification {
             Ok(())
         } else {
             debug!("DiscordNotification failed: {}", res.text()?);
-            Err("")?
+            Err("".into())
         }
     }
 }

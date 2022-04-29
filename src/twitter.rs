@@ -41,7 +41,7 @@ impl Trigger for TwitterNotification {
             if (!result.stderr.is_empty()) {
                 debug!("{}", result.stderr);
             }
-            Err("")?
+            Err("".into())
         }
     }
 }

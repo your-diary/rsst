@@ -24,7 +24,7 @@ use rss::RssItem;
 use trigger::Trigger;
 use trigger::TriggerInfo;
 
-pub fn initialize_logger(should_log_debug: bool) -> () {
+pub fn initialize_logger(should_log_debug: bool) {
     if (should_log_debug) {
         env::set_var("RUST_LOG", "debug");
     } else {
@@ -48,8 +48,8 @@ pub fn handle_rss_feed_case(
     contents: &str,
     trigger_list: &Vec<Box<dyn Trigger>>,
     feed_config: &FeedConfig,
-) -> () {
-    let rss = Rss::new(&contents, &feed_config);
+) {
+    let rss = Rss::new(contents, feed_config);
 
     let parent_hash = rss.hash_code();
 
@@ -117,8 +117,8 @@ pub fn handle_atom_feed_case(
     contents: &str,
     trigger_list: &Vec<Box<dyn Trigger>>,
     feed_config: &FeedConfig,
-) -> () {
-    let atom = Atom::new(&contents, &feed_config);
+) {
+    let atom = Atom::new(contents, feed_config);
 
     let parent_hash = atom.hash_code();
 
