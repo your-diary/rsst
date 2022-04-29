@@ -1,6 +1,7 @@
 use std::collections::hash_map::DefaultHasher;
 use std::hash::Hash;
 use std::hash::Hasher;
+use std::rc::Rc;
 
 use quick_xml::events::Event;
 use quick_xml::Reader;
@@ -13,7 +14,7 @@ pub struct Rss {
     link: String,
     description: String,
     item_list: Vec<RssItem>,
-    feed_config: FeedConfig,
+    feed_config: Rc<FeedConfig>,
 }
 
 #[derive(Debug, Clone)]
@@ -22,6 +23,7 @@ pub struct RssItem {
     link: Option<String>,
     description: Option<String>,
     pub_date: Option<String>,
+    feed_config: Rc<FeedConfig>,
 }
 
 enum TagType {
@@ -44,7 +46,7 @@ impl Rss {
             link: String::new(),
             description: String::new(),
             item_list: Vec::new(),
-            feed_config: feed_config.clone(),
+            feed_config: Rc::new(feed_config.clone()),
         };
 
         let mut reader = Reader::from_str(xml);
@@ -69,7 +71,7 @@ impl Rss {
                     }
                     b"item" => {
                         tag_stack.push(TagType::Item);
-                        ret.item_list.push(RssItem::new());
+                        ret.item_list.push(RssItem::new(&ret.feed_config));
                     }
                     b"title" => match tag_stack.last().unwrap() {
                         TagType::Channel => {
@@ -178,12 +180,13 @@ impl Rss {
 }
 
 impl RssItem {
-    fn new() -> Self {
+    fn new(feed_config: &Rc<FeedConfig>) -> Self {
         RssItem {
             title: None,
             link: None,
             description: None,
             pub_date: None,
+            feed_config: Rc::clone(feed_config),
         }
     }
 
@@ -192,7 +195,9 @@ impl RssItem {
         let mut hasher = DefaultHasher::new();
         self.title.hash(&mut hasher);
         self.link.hash(&mut hasher);
-        self.pub_date.hash(&mut hasher);
+        if (!self.feed_config.should_omit_date_field_from_hash) {
+            self.pub_date.hash(&mut hasher);
+        }
         hasher.finish().to_string()
     }
 

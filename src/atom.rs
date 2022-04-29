@@ -1,6 +1,7 @@
 use std::collections::hash_map::DefaultHasher;
 use std::hash::Hash;
 use std::hash::Hasher;
+use std::rc::Rc;
 
 use quick_xml::events::Event;
 use quick_xml::Reader;
@@ -12,7 +13,7 @@ pub struct Atom {
     title: String,
     id: String,
     entry_list: Vec<AtomEntry>,
-    feed_config: FeedConfig,
+    feed_config: Rc<FeedConfig>,
 }
 
 #[derive(Debug, Clone)]
@@ -22,6 +23,7 @@ pub struct AtomEntry {
     updated: String,
     summary: Option<String>,
     content: Option<String>,
+    feed_config: Rc<FeedConfig>,
 }
 
 enum TagType {
@@ -43,7 +45,7 @@ impl Atom {
             title: String::new(),
             id: String::new(),
             entry_list: Vec::new(),
-            feed_config: feed_config.clone(),
+            feed_config: Rc::new(feed_config.clone()),
         };
 
         let mut reader = Reader::from_str(xml);
@@ -68,7 +70,7 @@ impl Atom {
                     }
                     b"entry" => {
                         tag_stack.push(TagType::Entry);
-                        ret.entry_list.push(AtomEntry::new());
+                        ret.entry_list.push(AtomEntry::new(&ret.feed_config));
                     }
                     b"title" => match tag_stack.last().unwrap() {
                         TagType::Feed => {
@@ -128,6 +130,11 @@ impl Atom {
                             ret.entry_list.last_mut().unwrap().title = text;
                         }
                         TagType::EntryId => {
+                            let text = if (ret.feed_config.is_golang_blog_mode) {
+                                text.replace("tag:blog.golang.org,2013:", "https://")
+                            } else {
+                                text
+                            };
                             ret.entry_list.last_mut().unwrap().id = text;
                         }
                         TagType::EntryUpdated => {
@@ -175,13 +182,14 @@ impl Atom {
 }
 
 impl AtomEntry {
-    fn new() -> Self {
+    fn new(feed_config: &Rc<FeedConfig>) -> Self {
         AtomEntry {
             id: String::new(),
             title: String::new(),
             updated: String::new(),
             summary: None,
             content: None,
+            feed_config: Rc::clone(feed_config),
         }
     }
 
@@ -190,7 +198,9 @@ impl AtomEntry {
         let mut hasher = DefaultHasher::new();
         self.title.hash(&mut hasher);
         self.id.hash(&mut hasher);
-        self.updated.hash(&mut hasher);
+        if (!self.feed_config.should_omit_date_field_from_hash) {
+            self.updated.hash(&mut hasher);
+        }
         hasher.finish().to_string()
     }
 

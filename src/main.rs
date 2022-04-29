@@ -19,7 +19,6 @@ fn main() {
 
     for feed_config in config.get_feed_config_list() {
         debug!("URL: {:?}", feed_config);
-        continue;
 
         let xml: String = rsst::retrieve_xml(feed_config.get_url());
 

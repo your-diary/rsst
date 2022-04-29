@@ -45,20 +45,8 @@ impl Config {
                                 JsonValue::Object(o) => {
                                     let mut feed_config =
                                         FeedConfig::new(o.get("url").unwrap().as_str().unwrap());
-                                    if let Some(b) = o.get("should_omit_summary_from_atom_hash") {
-                                        feed_config.should_omit_summary_from_atom_hash =
-                                            b.as_bool().unwrap();
-                                    }
-                                    if let Some(b) = o.get("should_omit_content_from_atom_hash") {
-                                        feed_config.should_omit_content_from_atom_hash =
-                                            b.as_bool().unwrap();
-                                    }
-                                    if let Some(b) = o.get("should_omit_updated_from_atom_hash") {
-                                        feed_config.should_omit_updated_from_atom_hash =
-                                            b.as_bool().unwrap();
-                                    }
-                                    if let Some(b) = o.get("should_omit_pub_date_from_rss_hash") {
-                                        feed_config.should_omit_pub_date_from_rss_hash =
+                                    if let Some(b) = o.get("should_omit_date_field_from_hash") {
+                                        feed_config.should_omit_date_field_from_hash =
                                             b.as_bool().unwrap();
                                     }
                                     if let Some(b) = o.get("is_golang_blog_mode") {
