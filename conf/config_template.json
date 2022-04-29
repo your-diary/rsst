@@ -1,0 +1,30 @@
+{
+    "should_log_debug": true,
+    "database_file": "./conf/db.sqlite3",
+    "triggers": {
+        "discord": {
+            "enabled": true,
+            "webhook_url": "https://discord.com/api/webhooks/217647058221348866/DPeZfHx66dN2OeHeTBmMWp347pIibEDmSCbz7k3HMh7aku9wKJqKaTjCyfJnMSKsnvsd"
+        },
+        "twitter": {
+            "enabled": true,
+            "consumer_key": "...",
+            "consumer_secret": "...",
+            "access_token": "...",
+            "access_token_secret": "..."
+        }
+    },
+    "feed_url_list": [
+        {
+            "url": "https://blog.rust-lang.org/feed.xml"
+        },
+        {
+            "url": "http://feeds.feedburner.com/oreilly/newbooks",
+            "should_omit_date_field_from_hash": true
+        },
+        {
+            "url": "https://go.dev/blog/feed.atom",
+            "is_golang_blog_mode": true
+        }
+    ]
+}
