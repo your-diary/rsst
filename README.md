@@ -40,6 +40,8 @@ In a similar manner, any triggers can be implemented by yourself (or via feature
 
 # 3. Configurations
 
+## 3.1 About
+
 rsst reads `./conf/config.json` as the configuration file. This file is auto-reloaded without the need of restarting a Docker container.
 
 You need not to write this config file from scratch. Just start by copying the template:
@@ -49,7 +51,7 @@ cp conf/config_template.json conf/config.json
 vi conf/config.json
 ```
 
-Example:
+## 3.2 Example
 
 ```json
 {
@@ -69,13 +71,30 @@ Example:
         }
     },
     "feed_url_list": [
-        "https://archlinux.org/feeds/news/",
-        "https://alpinelinux.org/atom.xml",
-        "https://blog.rust-lang.org/feed.xml",
-        "https://go.dev/blog/feed.atom"
+        {
+            "url": "https://blog.rust-lang.org/feed.xml"
+        },
+        {
+            "url": "http://feeds.feedburner.com/oreilly/newbooks",
+            "should_omit_date_field_from_hash": true
+        },
+        {
+            "url": "https://go.dev/blog/feed.atom",
+            "is_golang_blog_mode": true
+        }
     ]
 }
 ```
+
+## 3.3 `feed_url_list`
+
+The array `feed_url_list` is where you register your favorites RSS/Atom feeds. Each element is of the type `Object` rather than simply a URL (`String`). This object has this structure:
+
+| Field | Required | Default Value | Description |
+|:-|:-|:-|:-|
+| `url` | Yes | - | URL of RSS/Atom feed. |
+| `should_omit_date_field_from_hash` | No | `false` | A feed item is regarded as *new* when its hash value is not found in the database, and the hash is calculated using the item's title, link, publish date, etc. When `should_omit_date_field_from_hash == true`, the publish date is omitted from the calculation. This is sometimes useful as some feed suppliers often (e.g. everyday) update the values of publish date fields of existing feed items. |
+| `is_golang_blog_mode` | No | `false` | Undocumented. This is very specific. You may want to turn this on only when you specify `https://go.dev/blog/feed.atom` as `url`. |
 
 # 4. Build
 
