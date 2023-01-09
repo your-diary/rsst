@@ -90,23 +90,14 @@ impl Atom {
                         }
                         _ => (),
                     },
-                    b"updated" => match tag_stack.last().unwrap() {
-                        TagType::Entry => {
-                            tag_stack.push(TagType::EntryUpdated);
-                        }
-                        _ => (),
+                    b"updated" => if let TagType::Entry = tag_stack.last().unwrap() {
+                        tag_stack.push(TagType::EntryUpdated);
                     },
-                    b"summary" => match tag_stack.last().unwrap() {
-                        TagType::Entry => {
-                            tag_stack.push(TagType::EntrySummary);
-                        }
-                        _ => (),
+                    b"summary" => if let TagType::Entry = tag_stack.last().unwrap() {
+                        tag_stack.push(TagType::EntrySummary);
                     },
-                    b"content" => match tag_stack.last().unwrap() {
-                        TagType::Entry => {
-                            tag_stack.push(TagType::EntryContent);
-                        }
-                        _ => (),
+                    b"content" => if let TagType::Entry = tag_stack.last().unwrap() {
+                        tag_stack.push(TagType::EntryContent);
                     },
                     _ => {
                         tag_stack.push(TagType::Other);

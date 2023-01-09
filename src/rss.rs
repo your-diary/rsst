@@ -100,11 +100,8 @@ impl Rss {
                         }
                         _ => (),
                     },
-                    b"pubDate" => match tag_stack.last().unwrap() {
-                        TagType::Item => {
-                            tag_stack.push(TagType::ItemPubDate);
-                        }
-                        _ => (),
+                    b"pubDate" => if let TagType::Item = tag_stack.last().unwrap() {
+                        tag_stack.push(TagType::ItemPubDate);
                     },
                     _ => {
                         tag_stack.push(TagType::Other);
