@@ -21,7 +21,7 @@ pub fn run(command: &str, args: &Vec<&str>, input: &str) -> CommandOutput {
     let mut stdout = BufReader::new(child.stdout.take().unwrap());
     let mut stderr = BufReader::new(child.stderr.take().unwrap());
 
-    stdin.write(input.as_bytes()).unwrap();
+    stdin.write_all(input.as_bytes()).unwrap();
     drop(stdin);
 
     let mut stdout_buf = String::new();

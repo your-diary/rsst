@@ -46,7 +46,7 @@ pub fn retrieve_xml(url: &str) -> String {
 pub fn handle_rss_feed_case(
     db: &Database,
     contents: &str,
-    trigger_list: &Vec<Box<dyn Trigger>>,
+    trigger_list: &[Box<dyn Trigger>],
     feed_config: &FeedConfig,
 ) {
     let rss = Rss::new(contents, feed_config);
@@ -115,7 +115,7 @@ pub fn handle_rss_feed_case(
 pub fn handle_atom_feed_case(
     db: &Database,
     contents: &str,
-    trigger_list: &Vec<Box<dyn Trigger>>,
+    trigger_list: &[Box<dyn Trigger>],
     feed_config: &FeedConfig,
 ) {
     let atom = Atom::new(contents, feed_config);

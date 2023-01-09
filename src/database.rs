@@ -85,7 +85,10 @@ impl Database {
             .unwrap();
     }
 
-    pub fn select_feed_items(&self, hash_list: &Vec<String>) -> Vec<String> {
+    pub fn select_feed_items(
+        &self,
+        #[allow(clippy::ptr_arg)] hash_list: &Vec<String>,
+    ) -> Vec<String> {
         self.db_connection
             .prepare(r#"SELECT "hash" FROM "feed_items" WHERE "hash" IN rarray(?)"#)
             .unwrap()

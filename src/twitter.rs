@@ -11,6 +11,7 @@ pub struct TwitterNotification;
 const SCRIPT_PATH: &str = "./twitter/tweet.py";
 
 impl TwitterNotification {
+    #[allow(clippy::new_without_default)]
     pub fn new() -> Self {
         TwitterNotification {}
     }
