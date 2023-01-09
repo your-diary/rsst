@@ -79,27 +79,18 @@ impl Config {
                     JsonValue::Object(o) => {
                         for field in o.iter() {
                             match field {
-                                ("discord", o) => match o {
-                                    JsonValue::Object(o) => {
-                                        if (o.get("enabled").unwrap().as_bool().unwrap()) {
-                                            ret.trigger_list.push(Box::new(
-                                                DiscordNotification::new(
-                                                    o.get("webhook_url").unwrap().as_str().unwrap(),
-                                                ),
-                                            ));
-                                        }
+                                ("discord", JsonValue::Object(o)) => {
+                                    if (o.get("enabled").unwrap().as_bool().unwrap()) {
+                                        ret.trigger_list.push(Box::new(DiscordNotification::new(
+                                            o.get("webhook_url").unwrap().as_str().unwrap(),
+                                        )));
                                     }
-                                    _ => panic!(),
-                                },
-                                ("twitter", o) => match o {
-                                    JsonValue::Object(o) => {
-                                        if (o.get("enabled").unwrap().as_bool().unwrap()) {
-                                            ret.trigger_list
-                                                .push(Box::new(TwitterNotification::new()));
-                                        }
+                                }
+                                ("twitter", JsonValue::Object(o)) => {
+                                    if (o.get("enabled").unwrap().as_bool().unwrap()) {
+                                        ret.trigger_list.push(Box::new(TwitterNotification::new()));
                                     }
-                                    _ => panic!(),
-                                },
+                                }
                                 _ => panic!(),
                             }
                         }
