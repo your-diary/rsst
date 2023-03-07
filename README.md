@@ -22,19 +22,27 @@ Main Features:
 
 When rsst detects new blog entries, it runs a series of registered *triggers* for each entry.
 
-For example, `Discord` trigger is by default implemented, which sends a message to your Discord server:
+## 2.1 `Discord` trigger
+
+`Discord` trigger sends a message to a Discord server.
 
 |![](readme_assets/discord.png)|
 |:--:|
 | An example of `Discord` trigger. |
 
-`Twitter` trigger is also implemented, which posts a tweet:
+## 2.2 `Twitter` trigger
+
+`Twitter` trigger posts a tweet. We operate [@rsst_trigger](https://twitter.com/rsst_trigger), using this trigger.
 
 |![](readme_assets/twitter.png)|
 |:--:|
 | An example of `Twitter` trigger. |
 
-In a similar manner, any triggers can be implemented by yourself (or via feature requests perhaps). Here's the list of my future ideas:
+## 2.3 Other Triggers
+
+In a similar manner, any triggers can be implemented by yourself (or via feature requests perhaps).
+
+Here's the list of my future ideas:
 
 - `Pocket` trigger to add an new blog entry to your Pocket list.
 
