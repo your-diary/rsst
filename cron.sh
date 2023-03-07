@@ -24,7 +24,15 @@ while true; do
     echo "--------------- $(date) ---------------"
     ./target/release/rsst
     if [[ $? != 0 ]]; then
-        curl --silent -X POST "${discord_webhook_url}" -H 'Content-Type: application/json' -d "$(echo '{"wait": true, "content": "rsst: Failed. See the log."}' | jq --rawfile log <(tail "${log_file}") '.content += "\n\n" + $log')"
+        sleep 60
+        ./target/release/rsst #retry
+        if [[ $? != 0 ]]; then
+            curl --silent \
+                 -X POST \
+                 "${discord_webhook_url}" \
+                 -H 'Content-Type: application/json' \
+                 -d "$(echo '{"wait": true, "content": "rsst: Failed. See the log."}' | jq --rawfile log <(tail "${log_file}") '.content += "\n\n" + $log')"
+        fi
     fi
     echo
     for ((j = 0; j < i; ++j)); do
