@@ -26,6 +26,7 @@ pub struct RssItem {
     feed_config: Rc<FeedConfig>,
 }
 
+#[derive(Debug)]
 enum TagType {
     Other,
     Channel,
@@ -80,7 +81,7 @@ impl Rss {
                         TagType::Item => {
                             tag_stack.push(TagType::ItemTitle);
                         }
-                        _ => (),
+                        _ => tag_stack.push(TagType::Other),
                     },
                     b"link" => match tag_stack.last().unwrap() {
                         TagType::Channel => {
@@ -89,7 +90,7 @@ impl Rss {
                         TagType::Item => {
                             tag_stack.push(TagType::ItemLink);
                         }
-                        _ => (),
+                        _ => tag_stack.push(TagType::Other),
                     },
                     b"description" => match tag_stack.last().unwrap() {
                         TagType::Channel => {
@@ -98,7 +99,7 @@ impl Rss {
                         TagType::Item => {
                             tag_stack.push(TagType::ItemDescription);
                         }
-                        _ => (),
+                        _ => tag_stack.push(TagType::Other),
                     },
                     b"pubDate" => {
                         if let TagType::Item = tag_stack.last().unwrap() {
