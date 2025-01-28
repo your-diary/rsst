@@ -26,6 +26,7 @@ pub struct AtomEntry {
     feed_config: Rc<FeedConfig>,
 }
 
+#[derive(Debug)]
 enum TagType {
     Other,
     Feed,
