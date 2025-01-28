@@ -80,14 +80,14 @@ impl Config {
                         for field in o.iter() {
                             match field {
                                 ("discord", JsonValue::Object(o)) => {
-                                    if (o.get("enabled").unwrap().as_bool().unwrap()) {
+                                    if o.get("enabled").unwrap().as_bool().unwrap() {
                                         ret.trigger_list.push(Box::new(DiscordNotification::new(
                                             o.get("webhook_url").unwrap().as_str().unwrap(),
                                         )));
                                     }
                                 }
                                 ("twitter", JsonValue::Object(o)) => {
-                                    if (o.get("enabled").unwrap().as_bool().unwrap()) {
+                                    if o.get("enabled").unwrap().as_bool().unwrap() {
                                         ret.trigger_list.push(Box::new(TwitterNotification::new()));
                                     }
                                 }

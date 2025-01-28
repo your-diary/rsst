@@ -132,7 +132,7 @@ impl Atom {
                             ret.entry_list.last_mut().unwrap().title = text;
                         }
                         TagType::EntryId => {
-                            let text = if (ret.feed_config.is_golang_blog_mode) {
+                            let text = if ret.feed_config.is_golang_blog_mode {
                                 text.replace("tag:blog.golang.org,2013:", "https://")
                             } else {
                                 text
@@ -200,7 +200,7 @@ impl AtomEntry {
         let mut hasher = DefaultHasher::new();
         self.title.hash(&mut hasher);
         self.id.hash(&mut hasher);
-        if (!self.feed_config.should_omit_date_field_from_hash) {
+        if !self.feed_config.should_omit_date_field_from_hash {
             self.updated.hash(&mut hasher);
         }
         hasher.finish().to_string()

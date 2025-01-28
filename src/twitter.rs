@@ -31,15 +31,15 @@ impl Trigger for TwitterNotification {
 
         let result = command::run(command, &args, &input);
 
-        if (result.exit_status == 0) {
+        if result.exit_status == 0 {
             debug!("TwitterNotification success");
             Ok(())
         } else {
             debug!("TwitterNotification failed:");
-            if (!result.stdout.is_empty()) {
+            if !result.stdout.is_empty() {
                 debug!("{}", result.stdout);
             }
-            if (!result.stderr.is_empty()) {
+            if !result.stderr.is_empty() {
                 debug!("{}", result.stderr);
             }
             Err("".into())

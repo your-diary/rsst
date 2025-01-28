@@ -25,7 +25,7 @@ use trigger::Trigger;
 use trigger::TriggerInfo;
 
 pub fn initialize_logger(should_log_debug: bool) {
-    if (should_log_debug) {
+    if should_log_debug {
         env::set_var("RUST_LOG", "debug");
     } else {
         env::set_var("RUST_LOG", "info");
@@ -53,7 +53,7 @@ pub fn handle_rss_feed_case(
 
     let parent_hash = rss.hash_code();
 
-    if (!db.does_feed_exist(&rss.hash_code())) {
+    if !db.does_feed_exist(&rss.hash_code()) {
         debug!(
             "New site: {} / {} / {}",
             rss.hash_code(),
@@ -75,7 +75,7 @@ pub fn handle_rss_feed_case(
             .is_ok()
         });
 
-        if (is_trigger_success) {
+        if is_trigger_success {
             db.insert_rss_feed(&rss);
             db.insert_rss_feed_items(&parent_hash, rss.get_item_list());
         }
@@ -105,7 +105,7 @@ pub fn handle_rss_feed_case(
                 .is_ok()
             });
 
-            if (is_trigger_success) {
+            if is_trigger_success {
                 db.insert_rss_feed_items(&parent_hash, &vec![new_rss_item]);
             }
         }
@@ -122,7 +122,7 @@ pub fn handle_atom_feed_case(
 
     let parent_hash = atom.hash_code();
 
-    if (!db.does_feed_exist(&atom.hash_code())) {
+    if !db.does_feed_exist(&atom.hash_code()) {
         debug!(
             "New site: {} / {} / {}",
             atom.hash_code(),
@@ -144,7 +144,7 @@ pub fn handle_atom_feed_case(
             .is_ok()
         });
 
-        if (is_trigger_success) {
+        if is_trigger_success {
             db.insert_atom_feed(&atom);
             db.insert_atom_feed_entries(&parent_hash, atom.get_entry_list());
         }
@@ -179,7 +179,7 @@ pub fn handle_atom_feed_case(
                 .is_ok()
             });
 
-            if (is_trigger_success) {
+            if is_trigger_success {
                 db.insert_atom_feed_entries(&parent_hash, &vec![new_atom_entry]);
             }
         }

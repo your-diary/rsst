@@ -18,7 +18,7 @@ impl Database {
         rusqlite::vtab::array::load_module(&db_connection).unwrap();
 
         //for debug
-        if (should_drop_tables_first) {
+        if should_drop_tables_first {
             db_connection
                 .execute(r#"DROP TABLE IF EXISTS "feed_items";"#, [])
                 .unwrap();

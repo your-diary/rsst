@@ -195,7 +195,7 @@ impl RssItem {
         let mut hasher = DefaultHasher::new();
         self.title.hash(&mut hasher);
         self.link.hash(&mut hasher);
-        if (!self.feed_config.should_omit_date_field_from_hash) {
+        if !self.feed_config.should_omit_date_field_from_hash {
             self.pub_date.hash(&mut hasher);
         }
         hasher.finish().to_string()
